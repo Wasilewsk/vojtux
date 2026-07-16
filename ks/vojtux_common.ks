@@ -52,7 +52,6 @@ timidity++
 lightdm-gtk-greeter
 lightdm-gtk-greeter-settings
 #ocr
-lios
 toggle-monitor
 
 # settings and shortcuts

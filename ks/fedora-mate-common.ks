@@ -32,7 +32,6 @@ nss-mdns
 
 # Drop things for size
 -@3d-printing
--@admin-tools
 -brasero
 -fedora-icon-theme
 -gnome-icon-theme
