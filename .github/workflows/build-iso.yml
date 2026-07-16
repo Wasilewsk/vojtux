@@ -1,0 +1,117 @@
+name: Build Vojtux ISO
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-rpm:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:44
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Install build dependencies
+      run: |
+        dnf install -y rpm-build rpmdevtools python3-devel createrepo_c
+    
+    - name: Set up RPM build environment
+      run: |
+        rpmdev-setuptree
+        mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+    
+    - name: Build toggle-monitor RPM
+      run: |
+        rm -f ~/rpmbuild/SOURCES/*
+        cp rpm/toggle-monitor/monitor-toggle ~/rpmbuild/SOURCES/
+        cp rpm/toggle-monitor/10-keybindings-toggle-monitor ~/rpmbuild/SOURCES/
+        rpmbuild -ba rpm/toggle-monitor/toggle-monitor.spec
+    
+    - name: Build vojtux-settings RPM
+      run: |
+        rm -f ~/rpmbuild/SOURCES/*
+        cp rpm/vojtux-settings/01-accessibility ~/rpmbuild/SOURCES/
+        cp rpm/vojtux-settings/02-panel ~/rpmbuild/SOURCES/
+        cp rpm/vojtux-settings/03-keybindings ~/rpmbuild/SOURCES/
+        rpmbuild -ba rpm/vojtux-settings/vojtux-settings.spec
+    
+    - name: Build Anaconda addon RPM
+      run: |
+        rm -f ~/rpmbuild/SOURCES/*
+        cp -r rpm/anaconda-addon/com_vojtux_customizations ~/rpmbuild/SOURCES/
+        cp rpm/anaconda-addon/dbus_data/services/org.fedoraproject.Anaconda.Addons.VojtuxCustomizations.service ~/rpmbuild/SOURCES/
+        cp rpm/anaconda-addon/dbus_data/confs/org.fedoraproject.Anaconda.Addons.VojtuxCustomizations.conf ~/rpmbuild/SOURCES/
+        rpmbuild -ba rpm/anaconda-addon/anaconda-addon-vojtux.spec
+    
+    - name: Set up local repo with built RPMs
+      run: |
+        mkdir -p /tmp/vojtux-repo
+        cp ~/rpmbuild/RPMS/noarch/*.rpm /tmp/vojtux-repo/
+        createrepo_c /tmp/vojtux-repo
+    
+    - name: Upload repo artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: vojtux-rpms
+        path: /tmp/vojtux-repo/
+
+  build-iso:
+    needs: build-rpm
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:44
+      options: --privileged
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Download built RPMs
+      uses: actions/download-artifact@v4
+      with:
+        name: vojtux-rpms
+        path: /tmp/vojtux-repo/
+    
+    - name: Install build dependencies
+      run: |
+        dnf install -y lorax-lmc-novirt pykickstart anaconda-live
+    
+    - name: Create local repo for kickstart
+      run: |
+        createrepo_c /tmp/vojtux-repo/
+    
+    - name: Override kickstart repos to use local
+      run: |
+        mkdir -p live/tmp
+        cat > ks/local-repo.ks <<'EOF'
+        repo --name=vojtux-local --baseurl=file:///tmp/vojtux-repo
+        EOF
+        cat ks/local-repo.ks ks/vojtux_en.ks > ks/vojtux_en_local.ks
+    
+    - name: Flatten kickstart
+      run: |
+        ksflatten -c ks/vojtux_en_local.ks -o vojtux.ks
+    
+    - name: Build ISO
+      run: |
+        livemedia-creator \
+          --make-iso \
+          --no-virt \
+          --iso-only \
+          --anaconda-arg="--noselinux" \
+          --iso-name vojtux_44.iso \
+          --project vojtux \
+          --releasever 44 \
+          --ks vojtux.ks \
+          --tmp live/tmp
+    
+    - name: Upload ISO artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: vojtux-iso
+        path: live/tmp/*/vojtux_44.iso
