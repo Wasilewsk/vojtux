@@ -44,7 +44,8 @@ jobs:
       run: |
         rm -f ~/rpmbuild/SOURCES/*
         cp -r rpm/anaconda-addon/com_vojtux_customizations ~/rpmbuild/SOURCES/
-        cp -r rpm/anaconda-addon/dbus_data ~/rpmbuild/SOURCES/
+        cp rpm/anaconda-addon/dbus_data/services/org.fedoraproject.Anaconda.Addons.VojtuxCustomizations.service ~/rpmbuild/SOURCES/
+        cp rpm/anaconda-addon/dbus_data/confs/org.fedoraproject.Anaconda.Addons.VojtuxCustomizations.conf ~/rpmbuild/SOURCES/
         rpmbuild -ba rpm/anaconda-addon/anaconda-addon-vojtux.spec
     
     - name: Upload RPM artifacts
