@@ -16,7 +16,7 @@ zerombr
 clearpart --all
 services --enabled=NetworkManager,ModemManager --disabled=sshd
 network --bootproto=dhcp --device=link --activate
-rootpw --lock --iscrypted locked
+rootpw --lock
 shutdown
 
 %packages
