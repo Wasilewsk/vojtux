@@ -4,7 +4,7 @@ Release:  1
 Summary:  Script to turn monitor on and off
 License:  Public Domain
 
-Requires: xrandr speech-dispatcher-utils
+Requires: xrandr sox
 
 SOURCE0:  monitor-toggle
 SOURCE1:  10-keybindings-toggle-monitor

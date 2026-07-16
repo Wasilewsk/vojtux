@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.fedoraproject.Anaconda.Addons.VojtuxCustomizations
+Exec=/usr/libexec/anaconda/addon-runner --module com_vojtux_customizations.service

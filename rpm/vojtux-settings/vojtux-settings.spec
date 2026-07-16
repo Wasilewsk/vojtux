@@ -34,7 +34,7 @@ dconf update
 
 %changelog
 * Fri Nov 21 2025 vojtapolasek <krecoun@gmail.com> - 1-6
-- do not install a shortcut for starting a screen reader because in Fedora 43 it is by default
+- do not install a shortcut for starting a screen reader because in Fedora 43+ it is by default
 
 * Thu Apr 17 2025 vojtapolasek <krecoun@gmail.com> - 1-5
 - remove mate-menu configuration completely, it is impossible to package this. It will be preconfigured only at the live media.

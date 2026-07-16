@@ -1,4 +1,4 @@
-FROM fedora:43
+FROM fedora:44
 
 ENV input_kickstart_file='ks/vojtux_en.ks' \
     output_kickstart_file='output.ks'

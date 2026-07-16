@@ -6,9 +6,9 @@ screenSize=$(xrandr | awk 'BEGIN {foundOutput=0}
     /^[^ ]/ {if(foundOutput) exit 0}')
 if [ "$screenSize" != "" ]; then
     xrandr --output $output --fb $screenSize --off
-        spd-say 'monitor off'
+    play /usr/share/sounds/freedesktop/stereo/monitor-off.oga 2>/dev/null || play /usr/share/sounds/freedesktop/stereo/bell.oga 2>/dev/null || true
 else
     xrandr --output $output --auto
-    spd-say 'Monitor on'
+    play /usr/share/sounds/freedesktop/stereo/monitor-on.oga 2>/dev/null || play /usr/share/sounds/freedesktop/stereo/bell.oga 2>/dev/null || true
 fi
 

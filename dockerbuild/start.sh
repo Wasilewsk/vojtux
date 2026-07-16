@@ -7,6 +7,6 @@ mkdir -p /var/run/dbus
 dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address
 
 ksflatten -c $input_kickstart_file -o $output_kickstart_file
-livemedia-creator --make-iso --no-virt --iso-only --anaconda-arg="--noselinux" --iso-name vojtux_43.iso --project vojtux --releasever 43 --ks $output_kickstart_file --tmp /live/tmp
+livemedia-creator --make-iso --no-virt --iso-only --anaconda-arg="--noselinux" --iso-name vojtux_44.iso --project vojtux --releasever 44 --ks $output_kickstart_file --tmp /live/tmp
 
-find /live/tmp -name vojtux_43.iso -exec mv -t /output {} +
+find /live/tmp -name vojtux_44.iso -exec mv -t /output {} +

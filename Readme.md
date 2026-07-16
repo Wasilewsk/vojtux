@@ -10,7 +10,7 @@ The repo contains kickstart files to build the live image with English language.
 It also contains  files which are used to build RPM packages which are not part of Fedora and they are used in this distro.
 Resulting RPM packages are present in the [Vojtux Copr repository](https://copr.fedorainfracloud.org/coprs/tyrylu/vojtux-apps/).
 
-The live media is currently based on Fedora 43.
+The live media is currently based on Fedora 44.
 
 ## Principles of Vojtux
 
@@ -59,11 +59,8 @@ Known issues are listed [here](https://github.com/vojtapolasek/vojtux/issues?q=s
 
 ## Building live media ISO
 
-*Warning!* The Czech kickstart file is outdated!
-
 This repository is currently transitioning from the state where customizations were present in the kickstart file to a state where most of customizations will be packaged as RPMs.
-This is currently implemented for the English kickstart file, Czech kickstart file is not maintained right now.
-In future, it will get updated or deleted entirely.
+This is currently implemented for the English kickstart file. The Czech kickstart file has been updated to match.
 
 The kickstart file is inspired by the Fedora Mate spin.
 The Mate environment is chosen because it is lightweight and its accessibility is prety good.
@@ -72,7 +69,7 @@ Kickstart documentation can be found at <https://pykickstart.readthedocs.io/en/l
 
 Building of this image requires Fedora.
 It is strongly recommended to use Fedora version matching the one you are going to build.
-So if you are going to build a live media based on Fedora 43, it is strongly recommended to do it from Fedora 43 environment.
+So if you are going to build a live media based on Fedora 44, it is strongly recommended to do it from Fedora 44 environment.
 
 So how to build it?
 
@@ -104,7 +101,7 @@ So how to build it?
 5. Build the image
 
     ```bash
-    sudo livemedia-creator --make-iso --no-virt --iso-only  --anaconda-arg="--noselinux" --iso-name vojtux_43.iso --project vojtux --releasever 43 --ks <output_kickstart_file.ks> --tmp live/tmp
+    sudo livemedia-creator --make-iso --no-virt --iso-only  --anaconda-arg="--noselinux" --iso-name vojtux_44.iso --project vojtux --releasever 44 --ks <output_kickstart_file.ks> --tmp live/tmp
     ```
 
     - --make-iso creates ISO image. Note that you can create multiple things with livemedia-creator.
@@ -115,11 +112,11 @@ So how to build it?
 
     - --anaconda-arg="--noselinux" disables selinux during the installation, it was causing problems.
 
-    - --iso-name vojtux_43.iso provides name for the resulting ISO image
+    - --iso-name vojtux_44.iso provides name for the resulting ISO image
 
     - --project vojtux project name, this is used as image label and it is visible in the boot menu
 
-    - --releasever 43 this is also visible in the boot menu
+    - --releasever 44 this is also visible in the boot menu
 
     - --ks vojtux.ks use the kickstart file created in previous steps
 
@@ -138,11 +135,11 @@ There is a simple build.sh script included to show the sequence that I used to b
 Which should end in something like:
 
 ```
-sudo find ./dockerbuild/output -name vojtux_38.iso
-./dockerbuild/output/vojtux_38.iso
+sudo find ./dockerbuild/output -name vojtux_44.iso
+./dockerbuild/output/vojtux_44.iso
 ```
 
-Your `vojtux_38.iso` should be listed as above.
+Your `vojtux_44.iso` should be listed as above.
 
 ## What is actually done?
 

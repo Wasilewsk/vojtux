@@ -75,6 +75,18 @@ pandoc
 
 # brltty-xw for testing braille output without a physical device
 brltty-xw
+
+# Anaconda addon for Vojtux customizations during installation
+anaconda-addon-vojtux
+%end
+
+%addon com_vojtux_customizations
+enable-orca = True
+enable-speech-dispatcher = True
+enable-rpmfusion = True
+enable-vojtux-apps = True
+enable-lightdm-a11y = True
+set-selinux-permissive = True
 %end
 
 # copied from fedora-live-mate-compiz.ks
@@ -102,63 +114,6 @@ rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-*-primary
 # import Vojtux-apps key
 dnf copr enable -y tyrylu/vojtux-apps
 
-echo "Preparing Mate panel configuration override..."
-cat > /etc/dconf/db/local.d/00-panel-live-user <<- EOM
-[org/mate/panel/general]
-object-id-list=['clock', 'menu-bar', 'volume-control', 'notification-area', 'show-desktop', 'window-list', 'advanced-mate-menu']
-toplevel-id-list=['top']
-
-[org/mate/panel/objects/show-desktop]
-applet-iid='WnckletFactory::ShowDesktopApplet'
-locked=true
-object-type='applet'
-position=0
-toplevel-id='bottom'
-
-[org/mate/panel/objects/window-list]
-applet-iid='WnckletFactory::WindowListApplet'
-locked=true
-object-type='applet'
-position=20
-toplevel-id='bottom'
-
-[org/mate/panel/objects/clock]
-applet-iid='ClockAppletFactory::ClockApplet'
-locked=true
-object-type='applet'
-panel-right-stick=true
-position=0
-toplevel-id='top'
-
-[org/mate/panel/objects/menu-bar]
-locked=true
-object-type='menu-bar'
-position=0
-toplevel-id='top'
-
-[org/mate/panel/objects/notification-area]
-applet-iid='NotificationAreaAppletFactory::NotificationArea'
-locked=true
-object-type='applet'
-panel-right-stick=true
-position=10
-toplevel-id='top'
-
-[org/mate/panel/objects/volume-control]
-applet-iid='GvcAppletFactory::GvcApplet'
-locked=true
-object-type='applet'
-panel-right-stick=true
-position=20
-toplevel-id='top'
-
-[org/mate/panel/objects/advanced-mate-menu]
-applet-iid='MateMenuAppletFactory::MateMenuApplet'
-object-type='applet'
-panel-right-stick=false
-position=-1
-toplevel-id='top'
-EOM
 echo "Updating dconf databases..."
 dconf update
 
