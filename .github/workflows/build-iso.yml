@@ -85,9 +85,11 @@ jobs:
       run: |
         createrepo_c /tmp/vojtux-repo/
     
-    - name: Override kickstart repos to use local
+    - name: Override kickstart repos to use local and fix deps
       run: |
         mkdir -p live/tmp
+        cp ks/repos.ks ks/repos.ks.bak
+        sed -i '/rpmfusion-free-updates\|rpmfusion-nonfree-updates/d' ks/repos.ks
         cat > ks/local-repo.ks <<'EOF'
         repo --name=vojtux-local --baseurl=file:///tmp/vojtux-repo
         EOF
