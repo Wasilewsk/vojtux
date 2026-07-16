@@ -79,7 +79,7 @@ jobs:
     
     - name: Install build dependencies
       run: |
-        dnf install -y lorax-lmc-novirt pykickstart anaconda-live createrepo_c
+        dnf install -y lorax-lmc-novirt pykickstart anaconda-live createrepo_c policycoreutils-utils
     
     - name: Create local repo for kickstart
       run: |

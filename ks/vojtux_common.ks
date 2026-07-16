@@ -49,8 +49,6 @@ tmux
 unrar
 timidity++
 #display manager
--slick-greeter
--slick-greeter-mate
 lightdm-gtk-greeter
 lightdm-gtk-greeter-settings
 #ocr
