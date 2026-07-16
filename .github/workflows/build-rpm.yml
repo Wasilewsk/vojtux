@@ -1,0 +1,47 @@
+name: Build RPM Packages
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-rpm:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:44
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Install build dependencies
+      run: |
+        dnf install -y rpm-build rpmdevtools python3-devel anaconda anaconda-widgets anaconda-widgets-devel
+    
+    - name: Set up RPM build environment
+      run: |
+        rpmdev-setuptree
+        mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+    
+    - name: Build toggle-monitor RPM
+      run: |
+        cp rpm/toggle-monitor/* ~/rpmbuild/SOURCES/
+        rpmbuild -ba rpm/toggle-monitor/toggle-monitor.spec
+    
+    - name: Build vojtux-settings RPM
+      run: |
+        cp rpm/vojtux-settings/* ~/rpmbuild/SOURCES/
+        rpmbuild -ba rpm/vojtux-settings/vojtux-settings.spec
+    
+    - name: Build Anaconda addon RPM
+      run: |
+        cp -r rpm/anaconda-addon/* ~/rpmbuild/SOURCES/
+        rpmbuild -ba rpm/anaconda-addon/anaconda-addon-vojtux.spec
+    
+    - name: Upload RPM artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: rpms
+        path: ~/rpmbuild/RPMS/**/*.rpm
